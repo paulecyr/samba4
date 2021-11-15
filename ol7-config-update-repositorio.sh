@@ -21,13 +21,13 @@ fi
 echo "" >  /etc/yum.repos.d/public-yum-ol7.repo
 
 
-if [ -f /etc/yum.repos.d/mb-yum-ol7.repo ] 
+if [ -f /etc/yum.repos.d/public-yum-ol7.repo ] 
   then 
 	msgInfo "A configuração deste servidor parece já ter sido feita. Nada a executar"
 	exit
   else
-  	curl http://oraclelinux.ctim.mb/mb-yum-ol7.repo > /etc/yum.repos.d/mb-yum-ol7.repo
-	curl http://oraclelinux.ctim.mb/RPM-GPG-KEY-EPEL-7 > /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
+  	curl https://yum.oracle.com/public-yum-ol7.repo > /etc/yum.repos.d/public-yum-ol7.repo
+	curl https://dl.fedoraproject.org/pub/epel/RPM-GPG-KEY-EPEL-7 > /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-7
 fi
 
 yum check-update
@@ -49,5 +49,5 @@ msgInfo "A configuração para atualização automática foi realizada para que 
 
 yum -y update
 
-msgInfo "Marinha do Brasil\nDiretoria de Comunicações e Tecnologia da Informação da Marinha\n\nConfiguração de repositórios de atualização efetuada com sucesso"
+msgInfo "Configuração de repositórios de atualização efetuada com sucesso"
 
