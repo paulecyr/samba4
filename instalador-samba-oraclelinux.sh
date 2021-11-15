@@ -4,12 +4,12 @@
 
 
 
-# _____          _        _           _                  _       ______                _       _        ___  _________ 
-#|_   _|        | |      | |         | |                | |      |  _  \              (_)     (_)       |  \/  || ___ \
-#  | | _ __  ___| |_ __ _| | __ _  __| | ___  _ __    __| | ___  | | | |___  _ __ ___  _ _ __  _  ___   | .  . || |_/ /
-#  | || '_ \/ __| __/ _` | |/ _` |/ _` |/ _ \| '__|  / _` |/ _ \ | | | / _ \| '_ ` _ \| | '_ \| |/ _ \  | |\/| || ___ \
-# _| || | | \__ \ || (_| | | (_| | (_| | (_) | |    | (_| |  __/ | |/ / (_) | | | | | | | | | | | (_) | | |  | || |_/ /
-# \___/_| |_|___/\__\__,_|_|\__,_|\__,_|\___/|_|     \__,_|\___| |___/ \___/|_| |_| |_|_|_| |_|_|\___/  \_|  |_/\____/ 
+# _____          _        _           _                  _       ______                _       _      
+#|_   _|        | |      | |         | |                | |      |  _  \              (_)     (_)      
+#  | | _ __  ___| |_ __ _| | __ _  __| | ___  _ __    __| | ___  | | | |___  _ __ ___  _ _ __  _  ___   
+#  | || '_ \/ __| __/ _` | |/ _` |/ _` |/ _ \| '__|  / _` |/ _ \ | | | / _ \| '_ ` _ \| | '_ \| |/ _ \  
+# _| || | | \__ \ || (_| | | (_| | (_| | (_) | |    | (_| |  __/ | |/ / (_) | | | | | | | | | | | (_) | 
+# \___/_| |_|___/\__\__,_|_|\__,_|\__,_|\___/|_|     \__,_|\___| |___/ \___/|_| |_| |_|_|_| |_|_|\___/  
 #
 
 
@@ -26,7 +26,7 @@ if [[ $EUID -ne 0 ]]; then
 	exit 1
 fi
 
-whiptail --title "MB-instalador-SAMBA" --msgbox "Script de instalação do SAMBA 4 versão 1.2.6 Clique em OK para continuar." 8 78
+whiptail --title "Instalador-SAMBA" --msgbox "Script de instalação do SAMBA 4 versão 1.2.6 Clique em OK para continuar." 8 78
 
 
 #------------------------------------------------------------------------------------------------------------------------
@@ -111,7 +111,7 @@ antes_reboot ()
 
 while [ true ]
 do
-	Hostname=$(whiptail --title "AD DC Hostname" --inputbox "Nome do Servidor (Sigla da OM seguida de fs)" 10 60  3>&1 1>&2 2>&3)
+	Hostname=$(whiptail --title "AD DC Hostname" --inputbox "Nome do Servidor (Sigla da Empresa seguida de fs)" 10 60  3>&1 1>&2 2>&3)
 	exitstatus=$?
 	if [ $exitstatus = 1 ]; then
 		echo "Cancelado."
@@ -138,7 +138,7 @@ done
 
 while [ true ]
 do
-	Domain=$(whiptail --title "AD Domain" --inputbox "Nome do Domínio (indicativo naval - 6 caracteres)" 10 60  3>&1 1>&2 2>&3)
+	Domain=$(whiptail --title "AD Domain" --inputbox "Nome do Domínio (Máximo - 10 caracteres)" 10 60  3>&1 1>&2 2>&3)
 	exitstatus=$?
 	if [ $exitstatus = 1 ]; then
 		echo "Cancelado."
@@ -147,7 +147,7 @@ do
 	Domain=$(echo "$Domain" | sed 's/ //g')
 
 	Domain=$(echo $Domain | tr '[:upper:]' '[:lower:]')
-	if [ "${#Domain}" -eq  6 ]; then 
+	if [ "${#Domain}" -eq  10 ]; then 
 		if (whiptail --title "Confirmação do Nome de Domínio" --yesno "Nome de Domínio: "$Domain 8 78) then
     		break	
 		fi
@@ -280,7 +280,7 @@ fi
 
 
 #------------------------------------------------------------------------------------------------------------------------
-#Forwarder DNS Server: 10.205.144.6
+#Forwarder DNS Server: xxx.xxx.xxx.xxx
 # variável $End_dns
 
 
@@ -296,7 +296,7 @@ do
 
 #testa erro de digitação
 if [ "$End_dns" == "$End_IP" ]; then
-	whiptail --title "ERRO" --msgbox "Endereço de DNS Distrital inválido. Clique em OK para continuar." 8 78
+	whiptail --title "ERRO" --msgbox "Endereço de DNS inválido. Clique em OK para continuar." 8 78
 	continue
 fi
 
@@ -306,16 +306,16 @@ fi
 	if expr "$End_dns" : '[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*\.[0-9][0-9]*$' >/dev/null; then
   		for i in 1 2 3 4; do
     		if [ $(echo "$End_dns" | cut -d. -f$i) -gt 255 ]; then
-				whiptail --title "ERRO" --msgbox "Endereço de DNS Distrital inválido. Clique em OK para continuar." 8 78
+				whiptail --title "ERRO" --msgbox "Endereço de DNS inválido. Clique em OK para continuar." 8 78
 				continue
     		fi
   		done
   		if echo $End_dns | grep -E '^(192\.168|10\.|172\.1[6789]\.|172\.2[0-9]\.|172\.3[01]\.)' >/dev/null; then
-      		        if (whiptail --title "Confirmação IP do DNS" --yesno "Confirma Endereço DNS Distrital ? "$End_dns 8 78) then
+      		        if (whiptail --title "Confirmação IP do DNS" --yesno "Confirma Endereço DNS? "$End_dns 8 78) then
 				break
 			fi
 		else
-			whiptail --title "ERRO" --msgbox "Endereço de DNS Distrital inválido. Clique em OK para continuar." 8 78			
+			whiptail --title "ERRO" --msgbox "Endereço de DNS inválido. Clique em OK para continuar." 8 78			
 		fi
 	else
 		continue
@@ -329,14 +329,14 @@ fi
 
 
 #------------------------------------------------------------------------------------------------------------------------
-# Servidor de NTP distrital
+# Servidor de NTP 200.160.7.193
 # variável $End_ntp
 
 
 
 while [ true ]
 do
-	End_ntp=$(whiptail --title "Servidor de Hora Distrital" --inputbox "Servidor de Hora Distrital: " 10 60  3>&1 1>&2 2>&3)
+	End_ntp=$(whiptail --title "Servidor de Hora" --inputbox "Servidor de Hora: " 10 60  3>&1 1>&2 2>&3)
 	exitstatus=$?
 	if [ $exitstatus = 1 ]; then
                 echo "Cancelado."
@@ -346,7 +346,7 @@ do
         End_ntp=$(echo "$End_ntp" | sed 's/ //g')
 	
 
-	if (whiptail --title "Confirmação do NTP" --yesno "Confirma Servidor de Hora Distrital? "$End_ntp 8 78) then
+	if (whiptail --title "Confirmação do NTP" --yesno "Confirma Servidor de Hora? "$End_ntp 8 78) then
             break
 	fi
 
